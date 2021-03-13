@@ -1,0 +1,1 @@
+s!function git_revparse_single!function git_revparse_single_f!

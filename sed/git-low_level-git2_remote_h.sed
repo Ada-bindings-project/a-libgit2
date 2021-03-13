@@ -1,0 +1,1 @@
+s!Git.Low_Level.git2_types_h.git_remote_callbacks!git_remote_callbacks!

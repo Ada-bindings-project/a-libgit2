@@ -1,0 +1,1 @@
+s!function git_repository_open_bare!function git_repository_open_bare_f!
