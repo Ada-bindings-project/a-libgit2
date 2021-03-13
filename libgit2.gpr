@@ -1,11 +1,14 @@
-project Libgit2 is
+library project Libgit2 is
    for Create_Missing_Dirs use "True";
    for Source_Dirs use ("src/**",".","sed");
    for Object_Dir use ".obj";
-   for Library_Name use "ALibgit2";
+   for Library_Name use "A-libgit2";
    for Library_Dir use "lib";
    for Languages use ("Ada", "C++", "MarkDown", "Makefile", "Sed");
-
+   
+   --  Used To Get Quic access To The C-Header Files.
+   for Source_Dirs use project'Source_Dirs & "/usr/include/git2";     
+   
    package Pretty_Printer is
       for Default_Switches ("ada") use ("-M128", 
                                         "-N", 
@@ -37,11 +40,15 @@ project Libgit2 is
    end Compiler;
 
    package Naming is
+      for Spec_Suffix ("C++") use ".h";
       for Body_Suffix ("makefile") use ".mk";
       for Body_Suffix ("MarkDown") use ".md";
       for Body_Suffix ("sed") use ".sed";
       for Implementation_Exceptions ("makefile") use ("Makefile");
    end Naming;
+   package Linker is
+      for Linker_Options use ("-l" & "git2");
+   end Linker;
    
 end Libgit2;
 

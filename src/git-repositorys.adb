@@ -19,6 +19,52 @@ package body Git.Repositorys is
       Retcode_2_Exeption (Ret);
    end Open;
 
+   ----------
+   -- Open --
+   ----------
+
+   procedure Open (Repo : in out Repository; Wt : Git.Worktrees.Worktree) is
+   begin
+      Retcode_2_Exeption (Git.Low_Level.Git2_Repository_H.Git_Repository_Open_From_Worktree
+                          (C_Out => Repo.Impl'Address,
+                           Wt    => Wt.Impl));
+   end Open;
+
+   ----------
+   -- Open --
+   ----------
+
+   procedure Wrap (Repo : in out Repository; Odb : Git.Odbs.Odb) is
+   begin
+      Retcode_2_Exeption (Git.Low_Level.Git2_Repository_H.Git_Repository_Wrap_Odb
+                          (C_Out => Repo.Impl'Address,
+                           Odb   => Odb.Impl));
+   end Wrap;
+
+   --------------
+   -- Discover --
+   --------------
+
+   procedure Discover
+     (Repo         : in out Repository;
+      Start_Path   : String;
+      Across_Fs    : Boolean;
+      Ceiling_Dirs : String)
+   is
+      Ret            : Interfaces.C.Int;
+      C_Start_Path   : Interfaces.C.Strings.Chars_Ptr := New_String (Start_Path);
+      C_Ceiling_Dirs : Interfaces.C.Strings.Chars_Ptr := New_String (Ceiling_Dirs);
+   begin
+      --  Ret := Git.Low_Level.Git2_Repository_H.Git_Repository_Discover
+      --    (C_Out              => Repo.Impl'Address,
+      --     Start_Path         => C_Start_Path,
+      --     Across_Fs          => Boolean'Pos (Across_Fs),
+      --     Ceiling_Dirs       => C_Ceiling_Dirs);
+      Free (C_Start_Path);
+      Free (C_Ceiling_Dirs);
+      Retcode_2_Exeption (Ret);
+   end Discover;
+
    ---------
    -- "+" --
    ---------
@@ -72,7 +118,9 @@ package body Git.Repositorys is
    ----------
 
    procedure Init
-     (Repo : in out Repository; Path : String; Is_Bare : Boolean := False)
+     (Repo : in out Repository;
+      Path    : String;
+      Is_Bare : Boolean := False)
    is
       Ret    : Interfaces.C.Int;
       C_PAth : Interfaces.C.Strings.Chars_Ptr := New_String (Path);
@@ -84,7 +132,23 @@ package body Git.Repositorys is
       Free (C_Path);
       Retcode_2_Exeption (Ret);
    end Init;
+   function "+" (L, R : Init_Flag_T) return Init_Flag_T is
+   begin
+      return L or R;
+   end;
 
+   procedure Init (Repo          : in out Repository;
+                   Version       : Integer;
+                   Flags         : Init_Flag_T;
+                   Mode          : Init_Mode_T;
+                   Workdir_Path  : String;
+                   Description   : String;
+                   Template_Path : String;
+                   Initial_Head  : String;
+                   Origin_Url    : String) is
+   begin
+      null;
+   end;
 
    --------------
    -- Finalize --

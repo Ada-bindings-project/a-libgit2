@@ -3,85 +3,85 @@ pragma Style_Checks (Off);
 pragma Warnings ("U");
 
 with Interfaces.C; use Interfaces.C;
-limited with Git.Low_Level.git2_types_h;
+limited with git.Low_Level.git2_types_h;
 with Interfaces.C.Strings;
 
-package Git.Low_Level.git2_ignore_h is
+package git.Low_Level.git2_ignore_h is
 
-  -- * Copyright (C) the libgit2 contributors. All rights reserved.
-  -- *
-  -- * This file is part of libgit2, distributed under the GNU GPL v2 with
-  -- * a Linking Exception. For full terms see the included COPYING file.
-  --  
-
-  --*
-  -- * Add ignore rules for a repository.
-  -- *
-  -- * Excludesfile rules (i.e. .gitignore rules) are generally read from
-  -- * .gitignore files in the repository tree or from a shared system file
-  -- * only if a "core.excludesfile" config value is set.  The library also
-  -- * keeps a set of per-repository internal ignores that can be configured
-  -- * in-memory and will not persist.  This function allows you to add to
-  -- * that internal rules list.
-  -- *
-  -- * Example usage:
-  -- *
-  -- *     error = git_ignore_add_rule(myrepo, "*.c\ndir/\nFile with space\n");
-  -- *
-  -- * This would add three rules to the ignores.
-  -- *
-  -- * @param repo The repository to add ignore rules to.
-  -- * @param rules Text of rules, a la the contents of a .gitignore file.
-  -- *              It is okay to have multiple rules in the text; if so,
-  -- *              each rule should be terminated with a newline.
-  -- * @return 0 on success
-  --  
-
-   function git_ignore_add_rule (repo : access Git.Low_Level.git2_types_h.git_repository; rules : Interfaces.C.Strings.chars_ptr) return int  -- /usr/include/git2/ignore.h:37
-   with Import => True, 
-        Convention => C, 
-        External_Name => "git_ignore_add_rule";
+  --  * Copyright (C) the libgit2 contributors. All rights reserved.
+  --  *
+  --  * This file is part of libgit2, distributed under the GNU GPL v2 with
+  --  * a Linking Exception. For full terms see the included COPYING file.
+  --
 
   --*
-  -- * Clear ignore rules that were explicitly added.
-  -- *
-  -- * Resets to the default internal ignore rules.  This will not turn off
-  -- * rules in .gitignore files that actually exist in the filesystem.
-  -- *
-  -- * The default internal ignores ignore ".", ".." and ".git" entries.
-  -- *
-  -- * @param repo The repository to remove ignore rules from.
-  -- * @return 0 on success
-  --  
+  --  * Add ignore rules for a repository.
+  --  *
+  --  * Excludesfile rules (i.e. .gitignore rules) are generally read from
+  --  * .gitignore files in the repository tree or from a shared system file
+  --  * only if a "core.excludesfile" config value is set.  The library also
+  --  * keeps a set of per-repository internal ignores that can be configured
+  --  * in-memory and will not persist.  This function allows you to add to
+  --  * that internal rules list.
+  --  *
+  --  * Example usage:
+  --  *
+  --  *     error = git_ignore_add_rule(myrepo, "*.c\ndir/\nFile with space\n");
+  --  *
+  --  * This would add three rules to the ignores.
+  --  *
+  --  * @param repo The repository to add ignore rules to.
+  --  * @param rules Text of rules, a la the contents of a .gitignore file.
+  --  *              It is okay to have multiple rules in the text; if so,
+  --  *              each rule should be terminated with a newline.
+  --  * @return 0 on success
+  --
 
-   function git_ignore_clear_internal_rules (repo : access Git.Low_Level.git2_types_h.git_repository) return int  -- /usr/include/git2/ignore.h:52
-   with Import => True, 
-        Convention => C, 
-        External_Name => "git_ignore_clear_internal_rules";
+   function git_ignore_add_rule (repo : access git.Low_Level.git2_types_h.git_repository; rules : Interfaces.C.Strings.chars_ptr) return int  -- /usr/include/git2/ignore.h:37
+      with Import   => True,
+      Convention    => C,
+      External_Name => "git_ignore_add_rule";
 
   --*
-  -- * Test if the ignore rules apply to a given path.
-  -- *
-  -- * This function checks the ignore rules to see if they would apply to the
-  -- * given file.  This indicates if the file would be ignored regardless of
-  -- * whether the file is already in the index or committed to the repository.
-  -- *
-  -- * One way to think of this is if you were to do "git check-ignore --no-index"
-  -- * on the given file, would it be shown or not?
-  -- *
-  -- * @param ignored boolean returning 0 if the file is not ignored, 1 if it is
-  -- * @param repo a repository object
-  -- * @param path the file to check ignores for, relative to the repo's workdir.
-  -- * @return 0 if ignore rules could be processed for the file (regardless
-  -- *         of whether it exists or not), or an error < 0 if they could not.
-  --  
+  --  * Clear ignore rules that were explicitly added.
+  --  *
+  --  * Resets to the default internal ignore rules.  This will not turn off
+  --  * rules in .gitignore files that actually exist in the filesystem.
+  --  *
+  --  * The default internal ignores ignore ".", ".." and ".git" entries.
+  --  *
+  --  * @param repo The repository to remove ignore rules from.
+  --  * @return 0 on success
+  --
+
+   function git_ignore_clear_internal_rules (repo : access git.Low_Level.git2_types_h.git_repository) return int  -- /usr/include/git2/ignore.h:52
+      with Import   => True,
+      Convention    => C,
+      External_Name => "git_ignore_clear_internal_rules";
+
+  --*
+  --  * Test if the ignore rules apply to a given path.
+  --  *
+  --  * This function checks the ignore rules to see if they would apply to the
+  --  * given file.  This indicates if the file would be ignored regardless of
+  --  * whether the file is already in the index or committed to the repository.
+  --  *
+  --  * One way to think of this is if you were to do "git check-ignore --no-index"
+  --  * on the given file, would it be shown or not?
+  --  *
+  --  * @param ignored boolean returning 0 if the file is not ignored, 1 if it is
+  --  * @param repo a repository object
+  --  * @param path the file to check ignores for, relative to the repo's workdir.
+  --  * @return 0 if ignore rules could be processed for the file (regardless
+  --  *         of whether it exists or not), or an error < 0 if they could not.
+  --
 
    function git_ignore_path_is_ignored
      (ignored : access int;
-      repo : access Git.Low_Level.git2_types_h.git_repository;
-      path : Interfaces.C.Strings.chars_ptr) return int  -- /usr/include/git2/ignore.h:71
-   with Import => True, 
-        Convention => C, 
-        External_Name => "git_ignore_path_is_ignored";
+      repo    : access git.Low_Level.git2_types_h.git_repository;
+      path    : Interfaces.C.Strings.chars_ptr) return int  -- /usr/include/git2/ignore.h:71
+      with Import   => True,
+      Convention    => C,
+      External_Name => "git_ignore_path_is_ignored";
 
-end Git.Low_Level.git2_ignore_h;
+end git.Low_Level.git2_ignore_h;

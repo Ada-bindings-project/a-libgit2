@@ -23,7 +23,7 @@ gen:.generate
 
 	python bin/patch_generated
 
-	@gprbuild  -j0 -k -p -P libgit2.gpr 2>&1 | tee .messages.txt
+	@gprbuild  -j0 -k -p -P libgit2.gpr c src/gen/* -u  2>&1 | tee .messages.txt
 
 # evaluate the build and generate empty .sed files for failed specs.
 	find sed -size 0 -name "*.sed" -delete
